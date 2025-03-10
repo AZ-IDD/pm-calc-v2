@@ -2689,6 +2689,7 @@ function displayTotalPrice() {
     const movePrice = parseFloat(document.getElementById('move-price').value.replace('$', ''));
     const totalPriceField = document.getElementById('total-move-storage-price');
     const totalPrice = sum + movePrice + parseFloat(starisprice);
+    localStorage.setItem('total-price', totalPrice.toFixed(2));
 
     console.log("ty movePrice ", movePrice);
 
@@ -4300,7 +4301,6 @@ function calculatePrice() {
     
     totalPrice += price + moveprice + specialPrice;
     
-    localStorage.setItem('total-price', totalPrice.toFixed(2));
      
 
 
