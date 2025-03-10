@@ -4159,7 +4159,6 @@ function getRates() {
 function fetchPrices() {
     const selectedDate = document.getElementById('pickup_date').value;
 
-    // פורמט התאריך מהטופס
     const dateParts = selectedDate.split('/');
     const formattedDate = `${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`;
 
@@ -4176,10 +4175,9 @@ function fetchPrices() {
         return response.json();
     })
     .then(data => {
-        const ratesData = JSON.parse(data.contents); // מוודאים שהדאטה מתפרש כ-JSON
+        const ratesData = JSON.parse(data.contents); 
         console.log('Rates Data:', ratesData);
 
-        // סינון המחירים לפי התאריך שנבחר
         const filteredRates = ratesData.filter(rate => rate.date === formattedDate);
 
         let defaultPricePerCF_PM = 0;
@@ -4204,12 +4202,10 @@ function fetchPrices() {
         console.log('Default Price Per CF AM:', defaultPricePerCF_AM);
         console.log('Default Price Per CF PM LATE:', defaultPricePerCF_PM_LATE);
 
-        // שמירת המחירים בגלובלי לצורך חישובים נוספים
         window.defaultPricePerCF_PM = defaultPricePerCF_PM;
         window.defaultPricePerCF_AM = defaultPricePerCF_AM;
         window.defaultPricePerCF_PM_LATE = defaultPricePerCF_PM_LATE;
 
-        // קריאה לפונקציה לחישוב מחירים נוספים
         calculatePrice();
     })
     .catch(error => {
@@ -4254,10 +4250,8 @@ function calculatePrice() {
     //console.log('MinCFMoveThreshold: ', MinCFMoveThreshold);
     //console.log('formattedDate: ', formattedDate);
 
-    // קבלת מחירים מתוך ה-API
     let defaultPricePerCF = 0;
 
-    // סינון המחירים לפי התאריך והשעה שנבחרו
     const rateTypeMap = {
         "AM": "AM",
         "PM": "PM",
@@ -4265,7 +4259,6 @@ function calculatePrice() {
     };
     const selectedRateType = rateTypeMap[selectedTime];
 
-    // הגדרת המחיר המתאים לפי סוג התעריף שנשמר קודם
     switch (selectedRateType) {
         case 'AM':
             defaultPricePerCF = window.defaultPricePerCF_AM;
@@ -4277,10 +4270,9 @@ function calculatePrice() {
             defaultPricePerCF = window.defaultPricePerCF_PM_LATE;
             break;
         default:
-            defaultPricePerCF = 0; // תחליף במקרה ואין תעריף מתאים
+            defaultPricePerCF = 0; 
     }
 
-    // חישוב מחירי ההובלה
     if (distanceMiles <= FirstMilesExcluded) {
         moveprice = 0;
     } else {
@@ -4308,7 +4300,7 @@ function calculatePrice() {
     
     totalPrice += price + moveprice + specialPrice;
     
-
+    localStorage.setItem('total-price', totalPrice.toFixed(2));
      
 
 
@@ -4317,7 +4309,7 @@ function calculatePrice() {
     
     // Update movePriceField with totalPrice and totalPriceRange
     const movePriceField = document.getElementById('move-price');
-    movePriceField.value = isNaN(totalPrice) ? '' : '$' + totalPrice.toFixed(2) + ' ⇄ ' + '$' + parseInt(totalPrice + totalPriceRange);
+    movePriceField.value = isNaN(totalPrice) ? '' : '$' + totalPrice.toFixed(2);
 
    console.log('calculatePrice moveprice : ', moveprice);
    console.log("calculatePrice totalPrice : ", totalPrice);
